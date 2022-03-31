@@ -11,29 +11,43 @@ let dataBikes = [
   {name: 'NASAY', url: './images/assets/bike-6.jpg', price: 1399}
 ]
 
-let dataCardBike = [
-  {name: 'BIK045', url: './images/assets/bike-1.jpg', price: 675, quantity: 1}, 
-  {name: 'ZOOK7', url: './images/assets/bike-2.jpg', price: 799, quantity: 2},
-  {name: 'LIK089', url: './images/assets/bike-3.jpg', price: 839, quantity: 3}
-]
+let dataCardBike = [];
 
-let totalSum = 0;
-for (let i=0; i<dataCardBike.length; i++){
-  totalSum += dataCardBike[i].price * dataCardBike[i].quantity;
-}
+
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { dataBikes });
-});
-
-router.get('/shop', function(req, res, next) {
-  res.render('shop', { dataCardBike, totalSum });
+router.get('/', function (req, res, next) {
+  res.render('index', {dataBikes: dataBikes});
 });
 
 
+router.get('/shop', function (req, res, next) {
+  console.log(req.query)
+  dataCardBike.push({
+    name: req.query.name,
+    url: req.query.src,
+    price: req.query.price,
+    quantity: req.query.quantity
+  })
+  res.render('shop', {dataCardBike: dataCardBike})
+});
+
+
+router.post('/update-shop', function (req, res, next) {
+  console.log(req.query)
+  dataCardBike[req.body.id].quantity = req.body.quantity;
+  res.render('shop', {dataCardBike: dataCardBike})
+});
+
+
+router.get('/delete-shop', function (req, res, next) {
+  console.log(req.query)
+  dataCardBike.splice(req.query.indexNb, 1);
+  res.render('shop', {dataCardBike: dataCardBike})
+});
 
 
 
 
 module.exports = router;
+

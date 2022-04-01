@@ -35,12 +35,18 @@
       <div class="alert alert-dark d-flex list-inline" role="alert">
         <a class="text-primary fw-bold text-decoration-none me-2" href="/">Shop</a>
         <p class="nav-item p-d m-0"> / </p>
-        <a class="text-muted fw-bold text-decoration-none ms-2" href="/shop">Basket</a>
+        <a class="text-muted fw-bold text-decoration-none ms-2" href="#">Basket</a>
       </div>
 
-
+      <% totalCmd=0 %>
       <h1>Basket</h1>
       <div>
+
+        <% if (dataCardBike.length < 1) { %>
+ 
+          <P class="fw-bold fs-1 fst-italic text-danger">Your cart is empty</P>
+          <% } else { %>
+ 
         <table class="table">
           <thead>
             <tr>
@@ -55,30 +61,32 @@
           </thead>
           <tbody>
             <% 
-        let totalCmd = 0;
+
           for(let i=0; i<dataCardBike.length; i++){ %>
             <tr>
+
               <th scope="row"><%= [i] %></th>
               <td><img width="120px" src=<%= dataCardBike[i].url %>></td>
               <td><%= dataCardBike[i].name %></td>
               <td>
                 <div class="d-flex">
                   <form action="/update-shop" method="post">
-                    <input type="text" class="form-control w-50 me-2" name="quantity" placeholder="Quantity"
+                    <input type="text" class="form-control me-2" name="quantity" placeholder="Quantity"
                       aria-label="Quantity" value=<%= dataCardBike[i].quantity %>>
                     <input type="hidden" name="id" value="<%=i%>">
-                    <button class="btn btn-info" type="submit"><i class="bi bi-arrow-repeat"></i></button>
+                    <button class="btn btn-info display-inline" type="submit"><i class="bi bi-arrow-repeat"></i></button>
                   </form>
                 </div>
               </td>
               <td><%= dataCardBike[i].price %>€</td>
-              <td><%= dataCardBike[i].price *  dataCardBike[i].quantity %>€</td>
+              <td><%= dataCardBike[i].price *  dataCardBike[i].quantity%>€</td>
               <td><button class="btn btn-info" type="button" id="button-addon2"><a href="/delete-shop?indexNb=<%=i%>"><i
                       class="bi bi-trash3"></i></a></button></td>
             </tr>
             <%
         totalCmd += dataCardBike[i].price * dataCardBike[i].quantity;
   } %>
+
             <tr class="table-borderless">
               <th></th>
               <td></td>
@@ -93,6 +101,7 @@
         <div class="text-end me-5">
           <button class="btn btn-outline-info" type="button">Checkout</button>
         </div>
+          <% } %>
       </div>
     </div>
 

@@ -1,5 +1,11 @@
 var express = require('express');
 var router = express.Router();
+const app = express();
+const Stripe = require('stripe');
+const stripe = Stripe('sk_test_51KjfWtDGZlz8iehmD2TIOw9uiIHxSM2jZRSjwKeijSRyld61347FsHSevR7hhMKOBiXQkPpOEUccoTENsZtrTrUy00g1OOmYAK');
+
+
+
 
 
 let dataBikes = [
@@ -58,6 +64,43 @@ router.get('/delete-shop', function (req, res, next) {
 });
 
 
+
+router.post('/create-checkout-session', async (req, res) => {
+  let line_items = [];   
+    for (let i = 0; i < req.session.dataCardBike.length; i++) {
+
+      line_items.push({
+        price_data: {currency: 'eur',
+          product_data: {name: req.session.dataCardBike[i].name},
+          unit_amount: req.session.dataCardBike[i].price * 100},
+           quantity: req.session.dataCardBike[i].quantity})
+    }
+
+  const session = await stripe.checkout.sessions.create(
+    
+    {
+    
+    payment_method_types: ['card'],
+    line_items,
+    mode: 'payment',
+    success_url: 'http://localhost:3000/success',
+    cancel_url: 'http://localhost:3000/cancel',
+
+  });
+ 
+  res.redirect(303, session.url);
+ });
+
+ app.listen(4242, () => console.log(`Listening on port ${4242}!`));
+
+ 
+ router.get('/success', (req, res) => {
+  res.render('success');
+ });
+
+ router.get('/cancel', (req, res) => {
+  res.render('cancel');
+ });
 
 
 module.exports = router;

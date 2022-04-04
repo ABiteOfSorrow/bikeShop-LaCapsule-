@@ -40,6 +40,7 @@
 
       <% totalCmd=0 %>
       <h1>Basket</h1>
+      
       <div>
 
         <% if (dataCardBike.length < 1) { %>
@@ -74,7 +75,7 @@
                     <input type="text" class="form-control me-2" name="quantity" placeholder="Quantity"
                       aria-label="Quantity" value=<%= dataCardBike[i].quantity %>>
                     <input type="hidden" name="id" value="<%=i%>">
-                    <button class="btn btn-info display-inline" type="submit"><i class="bi bi-arrow-repeat"></i></button>
+                    <button class="btn btn-info display-inline"><i class="bi bi-arrow-repeat"></i></button>
                   </form>
                 </div>
               </td>
@@ -99,7 +100,9 @@
           </tbody>
         </table>
         <div class="text-end me-5">
-          <button class="btn btn-outline-info" type="button">Checkout</button>
+          <form action="/create-checkout-session" method="POST">
+            <button class="btn btn-info" type="submit">Checkout</button>
+           </form>
         </div>
           <% } %>
       </div>
